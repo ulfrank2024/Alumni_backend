@@ -11,11 +11,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.set("view engine", "ejs");
+// app.set("view engine", "ejs");
 
 app.use("/api/form", formRoutes);
 app.get("/admin", (req, res) => {
-    res.render("admin"); // Vue à créer
+    // res.render("admin"); // Vue à créer
 });
 
 const PORT = process.env.PORT || 5000;
