@@ -15,16 +15,12 @@ app.use(
             if (!origin || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
-                callback(new Error("Not allowed by CORS"));
+                console.warn("CORS rejeté pour l'origine :", origin);
+                callback(null, false); // On rejette sans planter
             }
         },
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["Content-Type"],
     })
 );
-
-// 👇 Cette ligne est très importante pour que CORS fonctionne parfaitement
-app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
