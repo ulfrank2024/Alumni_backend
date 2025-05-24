@@ -18,7 +18,6 @@ exports.submitForm = async (req, res) => {
             testimonial,
             communication,
             activite,
-            souvenir,
             conseil,
             agriculture,
             tutore,
@@ -33,10 +32,8 @@ exports.submitForm = async (req, res) => {
             certificationSuggestion,
             awardAdmin,
             adminAwardDetails,
-            adminAwardType,
             awardAlumni,
             alumniAwardDetails,
-            alumniAwardType,
             strengths,
             improvements,
             visionUneep,
@@ -44,16 +41,14 @@ exports.submitForm = async (req, res) => {
             entrepreneurshipCulture,
         } = req.body;
 
-        // 🔒 Valeurs par défaut pour champs facultatifs
-        const safeSouvenir = souvenir || "";
-        const safeAdminAwardType = adminAwardType || "";
-        const safeAlumniAwardType = alumniAwardType || "";
+        // Valeurs par défaut pour champs facultatifs
         const safeStrengths = strengths || "";
         const safeImprovements = improvements || "";
         const safeWorkStudy = workStudy || "";
         const safeEntrepreneurshipCulture = entrepreneurshipCulture || "";
 
-        // 🔍 Vérifier si l'email a déjà été utilisé
+
+        // Vérifier si l'email a déjà été utilisé
         const checkEmail = await db.query(
             `SELECT 1 FROM responses WHERE email = $1`,
             [email]
@@ -65,21 +60,22 @@ exports.submitForm = async (req, res) => {
                 .json({ message: "Vous avez déjà soumis ce formulaire." });
         }
 
-        // ✅ Insertion dans la base de données
+        // Insertion dans la base de données
         await db.query(
             `INSERT INTO responses (
               name, email, program, field, promotion_year, residence_country, current_job, current_company,
               teaching_quality, skills_usefulness, recommend, testimonial,
-              communication, activite, souvenir, conseil, agriculture, tutore, ecole, centre,
+              communication, activite, conseil, agriculture, tutore, ecole, centre,
               willing_to_teach, teaching_fields, partnership_suggestions, willing_to_support_partnership,
               abroad, certification_issue, certification_suggestion,
-              award_admin, admin_award_details, admin_award_type,
-              award_alumni, alumni_award_details, alumni_award_type,
-              strengths, improvements, vision_uneep, work_study, entrepreneurship_culture
+              award_admin, admin_award_details,
+              award_alumni, alumni_award_details,
+              strengths, improvements, vision_uneep, vision_uneep_text, work_study, entrepreneurship_culture
             ) VALUES (
               $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,
               $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,
-              $25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39
+              $25,$26,$27,$28,$29,$30,
+              $31,$32,$33,$34,$35,$36
             )`,
             [
                 name,
@@ -96,7 +92,6 @@ exports.submitForm = async (req, res) => {
                 testimonial,
                 communication,
                 activite,
-                safeSouvenir,
                 conseil,
                 agriculture,
                 tutore,
@@ -111,10 +106,8 @@ exports.submitForm = async (req, res) => {
                 certificationSuggestion,
                 awardAdmin,
                 adminAwardDetails,
-                safeAdminAwardType,
                 awardAlumni,
                 alumniAwardDetails,
-                safeAlumniAwardType,
                 safeStrengths,
                 safeImprovements,
                 visionUneep,
@@ -123,7 +116,7 @@ exports.submitForm = async (req, res) => {
             ]
         );
 
-        // 📧 Envoi d’email de confirmation
+        // Envoi d’email de confirmation
         await sendConfirmationEmail(email, name);
 
         res.status(200).json({ message: "Formulaire soumis avec succès." });
