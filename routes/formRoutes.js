@@ -9,5 +9,6 @@ router.post("/", submitForm);
 
 // 🔍 Nouvelle route GET
 router.get("/", getAllResponses);
+router.get("/all", getAllResponses);
 
 module.exports = router;
