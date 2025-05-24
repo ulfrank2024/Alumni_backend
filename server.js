@@ -16,7 +16,7 @@ app.use(
                 callback(null, true);
             } else {
                 console.warn("CORS rejeté pour l'origine :", origin);
-                callback(null, false); // On rejette sans planter
+                callback(null, false);
             }
         },
     })
@@ -26,6 +26,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/form", formRoutes);
+
+// ✅ Ping Render à la racine
+app.get("/", (req, res) => {
+    res.send("Bienvenue sur le backend SJD Alumni 🎓");
+});
 
 app.get("/admin", (req, res) => {
     res.send("Admin page");
