@@ -7,18 +7,13 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = ["https://ulfrank2024.github.io"];
-
+// ✅ Autoriser uniquement le domaine GitHub Pages
 app.use(
     cors({
-        origin: function (origin, callback) {
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true);
-            } else {
-                console.warn("CORS rejeté pour l'origine :", origin);
-                callback(null, false);
-            }
-        },
+        origin: "https://ulfrank2024.github.io",
+        methods: ["GET", "POST", "OPTIONS"],
+        allowedHeaders: ["Content-Type"],
+        credentials: false, // ou true si tu utilises les cookies (sinon false)
     })
 );
 
@@ -27,14 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/form", formRoutes);
 
-// ✅ Ping Render à la racine
+// Pour Render (ping route)
 app.get("/", (req, res) => {
-    res.send("Bienvenue sur le backend SJD Alumni 🎓");
-});
-
-app.get("/admin", (req, res) => {
-    res.send("Admin page");
+    res.send("Bienvenue sur le backend de SJD Alumni");
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
