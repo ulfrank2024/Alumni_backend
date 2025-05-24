@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { submitForm } = require("../controllers/formController");
+const {
+    submitForm,
+    getAllResponses,
+} = require("../controllers/formController");
 
 router.post("/", submitForm);
+
+// 🔍 Nouvelle route GET
+router.get("/", getAllResponses);
 
 module.exports = router;

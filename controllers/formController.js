@@ -103,3 +103,16 @@ exports.submitForm = async (req, res) => {
         res.status(500).json({ message: "Erreur lors de la soumission." });
     }
 };
+exports.getAllResponses = async (req, res) => {
+    try {
+        const result = await db.query(
+            "SELECT * FROM responses ORDER BY id DESC"
+        );
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des réponses :", error);
+        res.status(500).json({
+            message: "Erreur lors de la récupération des réponses.",
+        });
+    }
+};
