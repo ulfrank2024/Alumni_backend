@@ -23,12 +23,16 @@ app.use(
     })
 );
 
+// 👇 Cette ligne est très importante pour que CORS fonctionne parfaitement
+app.options("*", cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/form", formRoutes);
+
 app.get("/admin", (req, res) => {
-    // res.render("admin");
+    res.send("Admin page");
 });
 
 const PORT = process.env.PORT || 5000;
