@@ -7,10 +7,22 @@ const { fetch } = require("undici");
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [
+    "https://ulfrank2024.github.io",
+    "https://sjd-alumni.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+];
 
 app.use(
     cors({
-        origin: "https://ulfrank2024.github.io",
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("CORS non autorisé pour cette origine."));
+            }
+        },
         methods: ["GET", "POST", "OPTIONS"],
         allowedHeaders: ["Content-Type"],
         credentials: false,
